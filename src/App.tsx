@@ -1,53 +1,35 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-// import Box from './Box';
-// import Shadow from './Shadow';
+import { StatusBar } from 'react-native';
 import styled, { ThemeProvider } from 'styled-components/native';
-import Input from './Input';
-import { Switch } from 'react-native';
-import { useState } from 'react';
+import { theme, themeType } from './theme';
+import Input from './components/Input';
 
-const Container = styled.View`
+const Container = styled.SafeAreaView`
   flex: 1;
-  background-color: ${({ theme }: { theme: themeProps }) => theme.bgColor};
+  background-color: ${({ theme }: themeType) => theme.background};
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
-const lightTheme = {
-  inputColor: 'black',
-  inputBorder: 'black',
-  bgColor: '#fff',
-};
-
-const darkTheme = {
-  inputColor: 'white',
-  inputBorder: 'white',
-  bgColor: 'black',
-};
-
-type themeProps = {
-  inputColor?: string;
-  inputBorder?: string;
-  bgColor?: string;
-};
+const Title = styled.Text`
+  font-size: 40px;
+  font-weight: 600;
+  color: ${({ theme }: themeType) => theme.main};
+  width: 100%;
+  align-items: flex-end;
+  padding: 0 20px;
+  border: 1px solid white;
+`;
 
 export default function App() {
-  const [isLight, toggleTheme] = useState(true);
   return (
-    <ThemeProvider theme={isLight ? lightTheme : darkTheme}>
+    <ThemeProvider theme={theme}>
       <Container>
-        <StatusBar style="auto" />
-        <Switch
-          value={isLight}
-          onValueChange={isLight => toggleTheme(isLight)}
+        <StatusBar
+          backgroundColor={theme.background}
+          barStyle="light-content"
         />
-        <Input placeholder="typing message" />
+        <Title>ToDo List</Title>
         <Input />
-        {/* <Shadow /> */}
-        {/* <Box style={{ backgroundColor: 'red', height: 100 }} />
-      <Box style={{ backgroundColor: 'blue', flex: 1 }} />
-      <Box style={{ backgroundColor: 'pink', height: 100 }} /> */}
       </Container>
     </ThemeProvider>
   );
