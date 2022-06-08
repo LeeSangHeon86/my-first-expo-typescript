@@ -1,53 +1,71 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-// import Box from './Box';
-// import Shadow from './Shadow';
+import React, { useState } from 'react';
+import { StatusBar } from 'react-native';
 import styled, { ThemeProvider } from 'styled-components/native';
-import Input from './Input';
-import { Switch } from 'react-native';
-import { useState } from 'react';
+import { theme, themeType } from './theme';
+import Input from './components/Input';
+import Task from './components/Task';
+import { useWindowDimensions } from 'react-native';
 
-const Container = styled.View`
+const Container = styled.SafeAreaView`
   flex: 1;
-  background-color: ${({ theme }: { theme: themeProps }) => theme.bgColor};
+  background-color: ${({ theme }: themeType) => theme.background};
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
-const lightTheme = {
-  inputColor: 'black',
-  inputBorder: 'black',
-  bgColor: '#fff',
-};
+const Title = styled.Text`
+  font-size: 40px;
+  font-weight: 600;
+  color: ${({ theme }: themeType) => theme.main};
+  width: 100%;
+  align-items: flex-end;
+  padding: 0 20px;
+  border: 1px solid white;
+`;
 
-const darkTheme = {
-  inputColor: 'white',
-  inputBorder: 'white',
-  bgColor: 'black',
-};
-
-type themeProps = {
-  inputColor?: string;
-  inputBorder?: string;
-  bgColor?: string;
-};
+const List = styled.ScrollView`
+  flex: 1;
+  width: ${({ width }: { width: number }) => width - 40}px;
+  border: 1px solid white;
+`;
 
 export default function App() {
-  const [isLight, toggleTheme] = useState(true);
+  const [newTask, setNewTask] = useState('');
+  const width = useWindowDimensions().width;
+
+  const addTask = () => {
+    alert(newTask);
+    setNewTask('');
+  };
+
   return (
-    <ThemeProvider theme={isLight ? lightTheme : darkTheme}>
+    <ThemeProvider theme={theme}>
       <Container>
-        <StatusBar style="auto" />
-        <Switch
-          value={isLight}
-          onValueChange={isLight => toggleTheme(isLight)}
+        <StatusBar
+          backgroundColor={theme.background}
+          barStyle="light-content"
         />
-        <Input placeholder="typing message" />
-        <Input />
-        {/* <Shadow /> */}
-        {/* <Box style={{ backgroundColor: 'red', height: 100 }} />
-      <Box style={{ backgroundColor: 'blue', flex: 1 }} />
-      <Box style={{ backgroundColor: 'pink', height: 100 }} /> */}
+        <Title>ToDo List</Title>
+        <Input
+          value={newTask}
+          onChangeText={(text: string) => setNewTask(text)}
+          onSubmitEditing={addTask}
+        />
+        <List width={width}>
+          <Task text={'React Native'} />
+          <Task text={'React Native'} />
+          <Task text={'React Native'} />
+          <Task text={'React Native'} />
+          <Task text={'React Native'} />
+          <Task text={'React Native'} />
+          <Task text={'React Native'} />
+          <Task text={'React Native'} />
+          <Task text={'React Native'} />
+          <Task text={'React Native'} />
+          <Task text={'React Native'} />
+          <Task text={'React Native'} />
+          <Task text={'React Native'} />
+        </List>
       </Container>
     </ThemeProvider>
   );
