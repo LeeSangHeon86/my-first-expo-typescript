@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { StatusBar, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StatusBar } from 'react-native';
 import styled, { ThemeProvider } from 'styled-components/native';
 import { theme, themeType } from './theme';
 import Input from './components/Input';
 import Task from './components/Task';
 import { useWindowDimensions } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -20,43 +21,45 @@ const Title = styled.Text`
   width: 100%;
   align-items: flex-end;
   padding: 0 20px;
-  border: 1px solid white;
 `;
 
 const List = styled.ScrollView`
   flex: 1;
   width: ${({ width }: { width: number }) => width - 40}px;
-  border: 1px solid white;
 `;
 
 export default function App() {
   const [newTask, setNewTask] = useState('');
   const width = useWindowDimensions().width;
 
-  const tempData = {
-    '1': { id: '1', text: 'React Native', completed: false },
-    '2': { id: '2', text: 'Expo', completed: false },
-  };
+  // const tempData = {
+  //   '1': { id: '1', text: 'React Native', completed: false },
+  //   '2': { id: '2', text: 'Expo', completed: false },
+  // };
 
   type tempDataTypes = {
-    [ID: string | number]: {
-      id: string;
-      text: string;
-      completed: boolean;
-    };
-    '1': {
-      id: string;
-      text: string;
-      completed: boolean;
-    };
-    '2': {
+    [ID: string]: {
       id: string;
       text: string;
       completed: boolean;
     };
   };
 
-  const [tasks, setTasks] = useState(tempData);
+  const [tasks, setTasks] = useState({});
+
+  const storeData = async (tasks: tempDataTypes) => {
+    try {
+      await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
+      setTasks(tasks);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const getData = async () => {
+    const loadedData = await AsyncStorage.getItem('tasks');
+    setTasks(JSON.parse(loadedData || '{}'));
+  };
 
   const addTask = () => {
     if (newTask.length < 1) {
@@ -71,26 +74,42 @@ export default function App() {
     alert(newTask);
     setNewTask('');
 
-    setTasks({ ...tasks, ...objectNewTask });
+    // setTasks({ ...tasks, ...objectNewTask });
+    // Async storage 사용에 따른 교체
+    storeData({ ...tasks, ...objectNewTask });
   };
 
   const deleteTask = (id: string) => {
     const currentTasks: tempDataTypes = Object.assign({}, tasks);
     delete currentTasks[id];
-    setTasks(currentTasks);
+    // setTasks(currentTasks);
+    // Async storage 사용에 따른 교체
+    storeData(currentTasks);
   };
 
   const toggleTask = (id: string) => {
     const currentTasks: tempDataTypes = Object.assign({}, tasks);
     currentTasks[id].completed = !currentTasks[id].completed;
-    setTasks(currentTasks);
+    // setTasks(currentTasks);
+    // Async storage 사용에 따른 교체
+    storeData(currentTasks);
   };
 
-  const updateTask = (item: object) => {
+  const updateTask = (item: {
+    id: string;
+    text: string;
+    completed: boolean;
+  }) => {
     const currentTasks: tempDataTypes = Object.assign({}, tasks);
     currentTasks[item.id] = item;
-    setTasks(currentTasks);
+    // setTasks(currentTasks);
+    // Async storage 사용에 따른 교체
+    storeData(currentTasks);
   };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -109,7 +128,7 @@ export default function App() {
         <List width={width}>
           {Object.values(tasks)
             .reverse()
-            .map(item => {
+            .map((item: tempDataTypes['ID']) => {
               return (
                 <Task
                   key={item.id}

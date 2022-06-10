@@ -1,7 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components/native';
-import { theme, themeType } from '../theme';
 
 const Icon = styled.Image`
   width: 30px;

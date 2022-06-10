@@ -12,7 +12,6 @@ const Container = styled.View`
   border-radius: 10px;
   padding: 5px;
   margin: 3px 0;
-  border: 1px solid white;
 `;
 
 const Contents = styled.Text`
@@ -32,10 +31,10 @@ const Contents = styled.Text`
 type propsType = {
   deleteTask: (id: string) => void;
   toggleTask: (id: string) => void;
-  updateTask: (item: object) => void;
+  updateTask: (item: { id: string; text: string; completed: boolean }) => void;
   item: {
-    text: string;
     id: string;
+    text: string;
     completed: boolean;
   };
 };

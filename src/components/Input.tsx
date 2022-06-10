@@ -15,7 +15,6 @@ const StyledInput = styled.TextInput.attrs(({ theme }: themeType) => ({
   font-size: 25px;
   background-color: ${({ theme }: themeType) => theme.itemBackground};
   color: ${({ theme }: themeType) => theme.text};
-  border: 1px solid white;
 `;
 
 type propsType = {
