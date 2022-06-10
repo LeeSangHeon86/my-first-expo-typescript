@@ -19,15 +19,19 @@ const StyledInput = styled.TextInput.attrs(({ theme }: themeType) => ({
 `;
 
 type propsType = {
+  isEditing?: boolean;
   value: string;
   onChangeText: (text: string) => void;
   onSubmitEditing: () => void;
+  onBlur: () => void;
 };
 
 export default function Input({
   value,
+  isEditing,
   onChangeText,
   onSubmitEditing,
+  onBlur,
 }: propsType) {
   // const width = Dimensions.get('window').width;
   const width = useWindowDimensions().width;
@@ -42,6 +46,8 @@ export default function Input({
       value={value}
       onChangeText={onChangeText}
       onSubmitEditing={onSubmitEditing}
+      onBlur={onBlur}
+      autoFocus={isEditing ? true : false}
     />
   );
 }

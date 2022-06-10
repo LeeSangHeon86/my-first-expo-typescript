@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar, Text } from 'react-native';
 import styled, { ThemeProvider } from 'styled-components/native';
 import { theme, themeType } from './theme';
 import Input from './components/Input';
@@ -33,9 +33,63 @@ export default function App() {
   const [newTask, setNewTask] = useState('');
   const width = useWindowDimensions().width;
 
+  const tempData = {
+    '1': { id: '1', text: 'React Native', completed: false },
+    '2': { id: '2', text: 'Expo', completed: false },
+  };
+
+  type tempDataTypes = {
+    [ID: string | number]: {
+      id: string;
+      text: string;
+      completed: boolean;
+    };
+    '1': {
+      id: string;
+      text: string;
+      completed: boolean;
+    };
+    '2': {
+      id: string;
+      text: string;
+      completed: boolean;
+    };
+  };
+
+  const [tasks, setTasks] = useState(tempData);
+
   const addTask = () => {
+    if (newTask.length < 1) {
+      return;
+    }
+
+    const ID = Date.now().toString();
+    const objectNewTask = {
+      [ID]: { id: ID, text: newTask, completed: false },
+    };
+
     alert(newTask);
     setNewTask('');
+
+    setTasks({ ...tasks, ...objectNewTask });
+  };
+
+  const deleteTask = (id: string) => {
+    const currentTasks: tempDataTypes = Object.assign({}, tasks);
+    delete currentTasks[id];
+    setTasks(currentTasks);
+  };
+
+  const toggleTask = (id: string) => {
+    const currentTasks: tempDataTypes = Object.assign({}, tasks);
+    currentTasks[id].completed = !currentTasks[id].completed;
+    setTasks(currentTasks);
+  };
+
+  const updateTask = (item: object) => {
+    const currentTasks: tempDataTypes = Object.assign({}, tasks);
+    currentTasks[item.id] = item;
+    setTasks(currentTasks);
   };
 
   return (
@@ -50,21 +104,22 @@ export default function App() {
           value={newTask}
           onChangeText={(text: string) => setNewTask(text)}
           onSubmitEditing={addTask}
+          onBlur={() => setNewTask('')}
         />
         <List width={width}>
-          <Task text={'React Native'} />
-          <Task text={'React Native'} />
-          <Task text={'React Native'} />
-          <Task text={'React Native'} />
-          <Task text={'React Native'} />
-          <Task text={'React Native'} />
-          <Task text={'React Native'} />
-          <Task text={'React Native'} />
-          <Task text={'React Native'} />
-          <Task text={'React Native'} />
-          <Task text={'React Native'} />
-          <Task text={'React Native'} />
-          <Task text={'React Native'} />
+          {Object.values(tasks)
+            .reverse()
+            .map(item => {
+              return (
+                <Task
+                  key={item.id}
+                  item={item}
+                  deleteTask={deleteTask}
+                  toggleTask={toggleTask}
+                  updateTask={updateTask}
+                />
+              );
+            })}
         </List>
       </Container>
     </ThemeProvider>
