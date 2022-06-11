@@ -1,146 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import { StatusBar } from 'react-native';
-import styled, { ThemeProvider } from 'styled-components/native';
-import { theme, themeType } from './theme';
-import Input from './components/Input';
-import Task from './components/Task';
-import { useWindowDimensions } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import styled from 'styled-components/native';
+import Counter from './components/Counter';
+import Form from './components/Form';
+import Button from './components/Button';
+import CoinInfo from './components/CoinInfo';
+import { dataType, useFetch } from './hooks/useFetch';
 
-const Container = styled.SafeAreaView`
+const Container = styled.View`
   flex: 1;
-  background-color: ${({ theme }: themeType) => theme.background};
+  background-color: '#fff';
   align-items: center;
-  justify-content: flex-start;
-`;
-
-const Title = styled.Text`
-  font-size: 40px;
-  font-weight: 600;
-  color: ${({ theme }: themeType) => theme.main};
-  width: 100%;
-  align-items: flex-end;
-  padding: 0 20px;
-`;
-
-const List = styled.ScrollView`
-  flex: 1;
-  width: ${({ width }: { width: number }) => width - 40}px;
+  justify-content: center;
 `;
 
 export default function App() {
-  const [newTask, setNewTask] = useState('');
-  const width = useWindowDimensions().width;
-
-  // const tempData = {
-  //   '1': { id: '1', text: 'React Native', completed: false },
-  //   '2': { id: '2', text: 'Expo', completed: false },
-  // };
-
-  type tempDataTypes = {
-    [ID: string]: {
-      id: string;
-      text: string;
-      completed: boolean;
-    };
-  };
-
-  const [tasks, setTasks] = useState({});
-
-  const storeData = async (tasks: tempDataTypes) => {
-    try {
-      await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
-      setTasks(tasks);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const getData = async () => {
-    const loadedData = await AsyncStorage.getItem('tasks');
-    setTasks(JSON.parse(loadedData || '{}'));
-  };
-
-  const addTask = () => {
-    if (newTask.length < 1) {
-      return;
-    }
-
-    const ID = Date.now().toString();
-    const objectNewTask = {
-      [ID]: { id: ID, text: newTask, completed: false },
-    };
-
-    alert(newTask);
-    setNewTask('');
-
-    // setTasks({ ...tasks, ...objectNewTask });
-    // Async storage 사용에 따른 교체
-    storeData({ ...tasks, ...objectNewTask });
-  };
-
-  const deleteTask = (id: string) => {
-    const currentTasks: tempDataTypes = Object.assign({}, tasks);
-    delete currentTasks[id];
-    // setTasks(currentTasks);
-    // Async storage 사용에 따른 교체
-    storeData(currentTasks);
-  };
-
-  const toggleTask = (id: string) => {
-    const currentTasks: tempDataTypes = Object.assign({}, tasks);
-    currentTasks[id].completed = !currentTasks[id].completed;
-    // setTasks(currentTasks);
-    // Async storage 사용에 따른 교체
-    storeData(currentTasks);
-  };
-
-  const updateTask = (item: {
-    id: string;
-    text: string;
-    completed: boolean;
-  }) => {
-    const currentTasks: tempDataTypes = Object.assign({}, tasks);
-    currentTasks[item.id] = item;
-    // setTasks(currentTasks);
-    // Async storage 사용에 따른 교체
-    storeData(currentTasks);
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
+  const [isVisible, setIsVisible] = useState(true);
+  const URL = 'https://api.coinlore.net/api/tickers/?limit=3';
+  const data: dataType = useFetch(URL);
+  const renderData = data.data;
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container>
-        <StatusBar
-          backgroundColor={theme.background}
-          barStyle="light-content"
-        />
-        <Title>ToDo List</Title>
-        <Input
-          value={newTask}
-          onChangeText={(text: string) => setNewTask(text)}
-          onSubmitEditing={addTask}
-          onBlur={() => setNewTask('')}
-        />
-        <List width={width}>
-          {Object.values(tasks)
-            .reverse()
-            .map((item: tempDataTypes['ID']) => {
-              return (
-                <Task
-                  key={item.id}
-                  item={item}
-                  deleteTask={deleteTask}
-                  toggleTask={toggleTask}
-                  updateTask={updateTask}
-                />
-              );
-            })}
-        </List>
-      </Container>
-    </ThemeProvider>
+    <Container>
+      <StatusBar style="auto" />
+      {/* <Counter /> */}
+      {isVisible && <Form />}
+      <Button
+        title="on/off"
+        onPress={() => setIsVisible(isVisible => !isVisible)}
+      />
+
+      {renderData.map(
+        (coin: {
+          id: string;
+          symbol: string;
+          name: string;
+          price_usd: string;
+        }) => {
+          return (
+            <CoinInfo
+              key={coin.id}
+              symbol={coin.symbol}
+              name={coin.name}
+              price={coin.price_usd}
+            />
+          );
+        },
+      )}
+    </Container>
   );
 }
