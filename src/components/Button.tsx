@@ -15,12 +15,12 @@ const Title = styled.Text`
 
 interface propsType {
   title?: string;
-  onPress?: () => {};
+  onPress?: () => void;
 }
 
 const Button = ({ title, onPress }: propsType) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <Container>
         <Title>{title}</Title>
       </Container>

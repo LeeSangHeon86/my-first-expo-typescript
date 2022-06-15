@@ -6,6 +6,7 @@ const Container = styled.View`
   align-items: center;
   flex: 1;
   justify-content: center;
+  background-color: #ffffff;
 `;
 
 const StyledText = styled.Text`
@@ -13,11 +14,21 @@ const StyledText = styled.Text`
   margin: 10px;
 `;
 
-const Chat = () => {
+const Chat = ({ navigation, route }) => {
   return (
     <Container>
       <StyledText>Chat</StyledText>
-      <Button title="Chat" />
+      <StyledText>{route.params.id}</StyledText>
+      <StyledText>{route.params.name}</StyledText>
+      <Button
+        title="Home"
+        onPress={() =>
+          navigation.reset({
+            routes: [{ name: 'Home' }, { name: 'List' }],
+            // routes: [{ name: 'Home' }],
+          })
+        }
+      />
     </Container>
   );
 };

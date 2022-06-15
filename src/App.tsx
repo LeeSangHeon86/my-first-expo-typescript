@@ -11,17 +11,6 @@ const Container = styled.View`
   justify-content: center;
 `;
 
-// export default function App() {
-//   return (
-//     <NavigationContainer>
-//       <Container>
-//         <StatusBar style="auto" />
-//         <StackNav />
-//       </Container>
-//     </NavigationContainer>
-//   );
-// }
-
 export default function App() {
   return <Navigation />;
 }

@@ -6,6 +6,7 @@ const Container = styled.View`
   align-items: center;
   flex: 1;
   justify-content: center;
+  background-color: #ffffff;
 `;
 
 const StyledText = styled.Text`
@@ -19,12 +20,16 @@ const items = [
   { id: 3, name: 'React Navigation' },
 ];
 
-const List = () => {
+const List = ({ navigation }) => {
   return (
     <Container>
       <StyledText>List</StyledText>
       {items.map(({ id, name }) => (
-        <Button key={id} title={name} />
+        <Button
+          key={id}
+          title={name}
+          onPress={() => navigation.navigate('Chat', { id, name })}
+        />
       ))}
     </Container>
   );
