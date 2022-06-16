@@ -19,16 +19,27 @@ const StackNav = () => {
         },
         headerTitleStyle: {
           fontSize: 24,
-          color: '#ffffff',
+          // color: '#ffffff',
         },
         headerTitleAlign: 'center',
         // headerTitle: props => {
         //   console.log(props);
         //   return null;
         // },
-        headerTitle: ({ style }) => {
-          return <MaterialCommunityIcons name="react" style={style} />;
+        headerTitle: ({ style, tintColor }) => {
+          return (
+            <MaterialCommunityIcons
+              name="react"
+              style={style}
+              color={tintColor}
+            />
+          );
         },
+        headerBackTitle: 'Prev', // Ios만 적용
+        headerBackTitleStyle: {
+          fontSize: 26,
+        },
+        headerTintColor: '#ff0000',
       }}
     >
       <Stack.Screen

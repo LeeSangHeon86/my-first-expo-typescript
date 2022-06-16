@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import styled from 'styled-components/native';
 import Button from '../components/Button';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const Container = styled.View`
   align-items: center;
@@ -15,6 +16,33 @@ const StyledText = styled.Text`
 `;
 
 const Chat = ({ navigation, route }) => {
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: ({ onPress, tintColor }) => {
+        return (
+          <MaterialIcons
+            name="chevron-left"
+            size={26}
+            style={{ marginLeft: 11 }}
+            onPress={onPress}
+            color={tintColor}
+          />
+        );
+      },
+      headerRight: ({ onPress, tintColor }) => {
+        return (
+          <MaterialIcons
+            name="home"
+            size={26}
+            style={{ marginRight: 11 }}
+            onPress={() => navigation.popToTop()}
+            color={tintColor}
+          />
+        );
+      },
+    });
+  }, []);
+
   return (
     <Container>
       <StyledText>Chat</StyledText>
