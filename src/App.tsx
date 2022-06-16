@@ -1,28 +1,18 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import styled from 'styled-components/native';
-import { UserProvider } from './contexts/User';
-import User from './components/User';
+import { NavigationContainer } from '@react-navigation/native';
+import StackNav from './navigation/Stack';
+import Navigation from './navigation';
+import 'react-native-gesture-handler';
 
 const Container = styled.View`
   flex: 1;
   background-color: '#fff';
-  align-items: center;
+  /* align-items: center; */
   justify-content: center;
 `;
 
-const StyledText = styled.Text`
-  font-size: 30px;
-  font-weight: 600;
-`;
-
 export default function App() {
-  return (
-    <UserProvider>
-      <Container>
-        <StatusBar style="auto" />
-        <User />
-      </Container>
-    </UserProvider>
-  );
+  return <Navigation />;
 }
