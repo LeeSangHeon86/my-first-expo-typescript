@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components/native';
+import { ThemeContext } from 'styled-components';
 import { themeType } from '../theme';
-import { Button } from 'react-native';
+import { Button, Image } from '../components';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../navigations/Auth';
@@ -41,17 +42,30 @@ type Props = {
   navigation: SigninScreenNavPropsType;
 };
 
+const LOGO =
+  'https://firebasestorage.googleapis.com/v0/b/react-native-chat-app-d8603.appspot.com/o/logo.png?alt=media';
+
 const Signin = ({ navigation }: Props) => {
   const insets = useSafeAreaInsets();
+  const theme = useContext(ThemeContext);
 
   return (
     <Conatiner insets={insets}>
+      <Image url={LOGO} />
       <StyledText>Signin</StyledText>
       <Button
-        title="signup"
+        title="Signup"
         onPress={() => {
           navigation.navigate('Signup');
         }}
+      />
+      <Button
+        title="signup1"
+        onPress={() => {
+          navigation.navigate('Signup');
+        }}
+        containerStyle={{ marginTop: 0, backgroundColor: 'transparent' }}
+        textStyle={{ color: theme.btnTitleLink, fontSize: 18 }}
       />
     </Conatiner>
   );
