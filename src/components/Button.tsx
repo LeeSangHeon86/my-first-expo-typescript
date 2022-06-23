@@ -10,7 +10,7 @@ interface styledPropsType {
 const Container = styled.View<styledPropsType>`
   background-color: ${({ theme }) => theme.btnBackground};
   padding: 10px;
-  margin: 10px;
+  margin: 10px 0;
   flex: 1;
   justify-content: center;
   align-items: center;

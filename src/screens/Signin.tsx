@@ -1,11 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import styled from 'styled-components/native';
 import { ThemeContext } from 'styled-components';
 import { themeType } from '../theme';
-import { Button, Image } from '../components';
+import { Button, Image, Input } from '../components';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../navigations/Auth';
+import { TextInput } from 'react-native';
 
 const Conatiner = styled.View<styledPropsType>`
   flex: 1;
@@ -15,13 +16,8 @@ const Conatiner = styled.View<styledPropsType>`
   padding: 0 20px;
   padding-top: ${({ insets }) => insets.top}px;
   padding-bottom: ${({ insets }) => insets.bottom}px;
-  padding-left: ${({ insets }) => insets.left}px;
-  padding-right: ${({ insets }) => insets.right}px;
-`;
-
-const StyledText = styled.Text`
-  font-size: 30px;
-  color: ${({ theme }: { theme: themeType }) => theme.text};
+  /* padding-left: ${({ insets }) => insets.left}px;
+  padding-right: ${({ insets }) => insets.right}px; */
 `;
 
 interface styledPropsType {
@@ -49,16 +45,39 @@ const Signin = ({ navigation }: Props) => {
   const insets = useSafeAreaInsets();
   const theme = useContext(ThemeContext);
 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const refPassword = useRef<TextInput>(null);
+
+  const _handleSinginBtnPress = () => {
+    console.log('signin');
+  };
+
   return (
     <Conatiner insets={insets}>
       <Image url={LOGO} />
-      <StyledText>Signin</StyledText>
-      <Button
-        title="Signup"
-        onPress={() => {
-          navigation.navigate('Signup');
-        }}
+      <Input
+        label="Email"
+        value={email}
+        placeholder="Email"
+        onChangeText={setEmail}
+        returnKeyType="next"
+        maxLength={20}
+        textContentType="none"
+        onSubmitEditing={() => refPassword.current?.focus()}
       />
+      <Input
+        ref={refPassword}
+        label="Password"
+        value={password}
+        placeholder="Email"
+        onChangeText={setPassword}
+        returnKeyType="done"
+        maxLength={20}
+        isPassword={true}
+        onSubmitEditing={_handleSinginBtnPress}
+      />
+      <Button title="Sign in" onPress={_handleSinginBtnPress} />
       <Button
         title="signup1"
         onPress={() => {
