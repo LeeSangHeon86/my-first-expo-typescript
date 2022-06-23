@@ -6,6 +6,7 @@ import { themeType } from '../theme';
 interface styledPropsType {
   theme: themeType;
   isFocused: boolean;
+  ref?: any;
 }
 
 const Container = styled.View`
@@ -48,7 +49,7 @@ interface props {
   isPassword?: boolean;
 }
 
-const Input = forwardRef(
+const Input = forwardRef<TextInput, props>(
   (
     {
       label,
@@ -60,8 +61,8 @@ const Input = forwardRef(
       returnKeyType,
       maxLength,
       isPassword,
-    }: props,
-    ref?: React.Ref<TextInput>,
+    },
+    ref,
   ) => {
     const [isFocused, SetIsFocused] = useState(false);
 
@@ -80,11 +81,11 @@ const Input = forwardRef(
           placeholder={placeholder}
           returnKeyType={returnKeyType}
           maxLength={maxLength}
-          autoCapitalize="none"
-          autoCorrect={false}
+          autoCapitalize="none" // 첫글자 대문자 방지
+          autoCorrect={false} // 자동 고침 방지
           isFocused={isFocused}
           onFocus={() => SetIsFocused(true)}
-          secureTextEntry={isPassword}
+          secureTextEntry={isPassword} // 비밀번호 ** 표시용
         />
       </Container>
     );

@@ -18,10 +18,13 @@ const ProfileImage = styled.Image<styledPropsType>`
 `;
 
 interface PropsType {
-  url: string;
+  url?: string;
 }
 
-const Image = ({ url }: PropsType) => {
+const faceLogo =
+  'https://firebasestorage.googleapis.com/v0/b/react-native-chat-app-d8603.appspot.com/o/face.png?alt=media';
+
+const Image = ({ url = faceLogo }: PropsType) => {
   return (
     <Container>
       <ProfileImage source={{ uri: url }} />
