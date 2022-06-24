@@ -28,6 +28,9 @@ interface styledPropsType {
   theme: themeType;
 }
 
+const DEFAULT_Photo =
+  'https://firebasestorage.googleapis.com/v0/b/react-native-chat-app-d8603.appspot.com/o/face.png?alt=media';
+
 const Signup = () => {
   const insets = useSafeAreaInsets();
 
@@ -40,6 +43,8 @@ const Signup = () => {
   const refPassword = useRef<TextInput | null>(null);
   const refPasswordConfirm = useRef<TextInput | null>(null);
 
+  const [photo, setPhoto] = useState(DEFAULT_Photo);
+
   const _handleSingupBtnPress = () => {
     console.log('signup');
   };
@@ -47,7 +52,7 @@ const Signup = () => {
   return (
     <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid={true}>
       <Conatiner insets={insets}>
-        <Image />
+        <Image showButton={true} url={photo} onChanePhoto={setPhoto} />
         <Input
           label="Name"
           value={name}
