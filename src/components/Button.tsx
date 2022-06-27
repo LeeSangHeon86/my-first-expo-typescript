@@ -5,6 +5,7 @@ import { themeType } from '../theme';
 
 interface styledPropsType {
   theme: themeType;
+  disabled?: boolean;
 }
 
 const Container = styled.View<styledPropsType>`
@@ -15,6 +16,7 @@ const Container = styled.View<styledPropsType>`
   justify-content: center;
   align-items: center;
   border-radius: 4px;
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 `;
 
 const Title = styled.Text<styledPropsType>`
@@ -27,12 +29,19 @@ interface propsType {
   onPress: () => void;
   containerStyle?: { marginTop: number; backgroundColor: string };
   textStyle?: { color: string; fontSize: number };
+  disabled?: boolean;
 }
 
-const Button = ({ title, onPress, containerStyle, textStyle }: propsType) => {
+const Button = ({
+  title,
+  onPress,
+  containerStyle,
+  textStyle,
+  disabled,
+}: propsType) => {
   return (
     <TouchableOpacity onPress={onPress} style={{ flexDirection: 'row' }}>
-      <Container style={containerStyle}>
+      <Container style={containerStyle} disabled={disabled}>
         <Title style={textStyle}>{title}</Title>
       </Container>
     </TouchableOpacity>

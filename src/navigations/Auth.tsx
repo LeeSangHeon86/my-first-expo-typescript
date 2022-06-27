@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Signup, Signin } from '../screens';
+import { Signup, Signin, Profile } from '../screens';
 import { MaterialIcons } from '@expo/vector-icons';
 
 // screen 추가 될 때 마다 추가
 export type AuthStackParamList = {
   Signin: undefined;
   Signup: undefined;
+  Profile: undefined;
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -45,6 +46,7 @@ const Auth = () => {
           },
         }}
       />
+      <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   );
 };

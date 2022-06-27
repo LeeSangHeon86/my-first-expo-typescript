@@ -53,22 +53,19 @@ interface PropsType {
   onChanePhoto: (text: string) => void;
 }
 
-const faceLogo =
-  'https://firebasestorage.googleapis.com/v0/b/react-native-chat-app-d8603.appspot.com/o/face.png?alt=media';
-
 const Image = ({ url, showButton = false, onChanePhoto }: PropsType) => {
   const _handlePhotoBtnPress = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images, // All : 모든 파일, Images : 사진(이미지)만
+      allowsEditing: true, // 편집 가능
+      aspect: [4, 3], // 이미지 사이즈 조정
+      quality: 1, // 품질 옵션 0 ~ 1
     });
 
-    // console.log(result);
+    console.log(result);
 
-    if (result.cancelled === false) {
+    if (!result.cancelled) {
       onChanePhoto(result.uri);
     }
   };

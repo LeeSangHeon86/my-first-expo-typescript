@@ -2,12 +2,15 @@ import React, { useContext, useState, useRef } from 'react';
 import styled from 'styled-components/native';
 import { ThemeContext } from 'styled-components';
 import { themeType } from '../theme';
-import { Button, Image, Input } from '../components';
+import { Button, Image, Input, ErrorMessage } from '../components';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../navigations/Auth';
-import { TextInput } from 'react-native';
+import { Alert, TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { signin } from '../firebase';
+import { validateEmail, removeWhitespace } from '../utils';
+import { useEffect } from 'react';
 
 const Conatiner = styled.View<styledPropsType>`
   flex: 1;
@@ -39,6 +42,32 @@ type Props = {
   navigation: SigninScreenNavPropsType;
 };
 
+type AdditionalUserInfo = {
+  isNewUser: boolean;
+  profile: Object | null;
+  providerId: string;
+  username?: string | null;
+};
+
+type AuthCredential = {
+  providerId: string;
+  signInMethod: string;
+};
+
+type User = {
+  displayName: string;
+  email: string;
+  photoURL: string;
+  uid: string;
+};
+
+type UserCredential = {
+  additionalUserInfo?: AdditionalUserInfo | null;
+  credential: AuthCredential | null;
+  operationType?: string | null;
+  user: User | null;
+};
+
 const LOGO =
   'https://firebasestorage.googleapis.com/v0/b/react-native-chat-app-d8603.appspot.com/o/logo.png?alt=media';
 
@@ -48,10 +77,35 @@ const Signin = ({ navigation }: Props) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [disabled, setDisabled] = useState(true);
   const refPassword = useRef<TextInput | null>(null);
 
-  const _handleSinginBtnPress = () => {
-    console.log('signin');
+  useEffect(() => {
+    setDisabled(!(email && password && !errorMessage));
+  });
+
+  const _handleEmailChange = (email: string) => {
+    const changedEmail = removeWhitespace(email);
+    setEmail(changedEmail);
+    setErrorMessage(
+      validateEmail(changedEmail) ? '' : 'Email 형식이 유효하지 않습니다.',
+    );
+  };
+
+  const _handlePasswoerChange = (password: string) => {
+    const changedpassword = removeWhitespace(password);
+    setPassword(changedpassword);
+  };
+
+  const _handleSinginBtnPress = async () => {
+    try {
+      const user = await signin({ email, password });
+      navigation.navigate('Profile', { user });
+    } catch (e) {
+      Alert.alert('Signin Error');
+    }
+    // console.log('signin');
   };
 
   return (
@@ -60,12 +114,12 @@ const Signin = ({ navigation }: Props) => {
       contentContainerStyle={{ flex: 1 }}
     >
       <Conatiner insets={insets}>
-        <Image url={LOGO} />
+        <Image url={LOGO} onChanePhoto={() => {}} />
         <Input
           label="Email"
           value={email}
           placeholder="Email"
-          onChangeText={setEmail}
+          onChangeText={_handleEmailChange}
           returnKeyType="next"
           maxLength={20}
           textContentType="none"
@@ -76,13 +130,18 @@ const Signin = ({ navigation }: Props) => {
           label="Password"
           value={password}
           placeholder="Email"
-          onChangeText={setPassword}
+          onChangeText={_handlePasswoerChange}
           returnKeyType="done"
           maxLength={20}
           isPassword={true}
           onSubmitEditing={_handleSinginBtnPress}
         />
-        <Button title="Sign in" onPress={_handleSinginBtnPress} />
+        <ErrorMessage message={errorMessage} />
+        <Button
+          title="Sign in"
+          onPress={_handleSinginBtnPress}
+          disabled={disabled}
+        />
         <Button
           title="Sign up with email"
           onPress={() => {
