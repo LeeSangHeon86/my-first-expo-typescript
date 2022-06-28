@@ -1,18 +1,29 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import styled from 'styled-components/native';
-import { NavigationContainer } from '@react-navigation/native';
-import StackNav from './navigation/Stack';
-import Navigation from './navigation';
-import 'react-native-gesture-handler';
+import styled, { ThemeProvider } from 'styled-components/native';
+import { theme, themeType } from './theme';
+import { StatusBar } from 'react-native';
+import Navigation from './navigations';
+import { UserProvider } from './contexts';
+import { ProgressProvider } from './contexts';
 
 const Container = styled.View`
   flex: 1;
   background-color: '#fff';
-  /* align-items: center; */
   justify-content: center;
 `;
 
 export default function App() {
-  return <Navigation />;
+  return (
+    <ThemeProvider theme={theme}>
+      <ProgressProvider>
+        <UserProvider>
+          <StatusBar
+            backgroundColor={theme.background}
+            barStyle="dark-content"
+          />
+          <Navigation />
+        </UserProvider>
+      </ProgressProvider>
+    </ThemeProvider>
+  );
 }

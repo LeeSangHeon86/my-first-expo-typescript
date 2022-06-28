@@ -1,6 +1,5 @@
-import Home from './Home';
-import List from './List';
-import Chat from './Chat';
-import { Mall, Profile, Settings } from './Tabscreens';
+import Signin from './Signin';
+import Signup from './Signup';
+import Profile from './Profile';
 
-export { Home, List, Chat, Mall, Profile, Settings };
+export { Signin, Signup, Profile };

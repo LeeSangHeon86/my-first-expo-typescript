@@ -1,19 +1,18 @@
-import React, { createContext, useState } from 'react';
-import { ReactElement } from 'react';
+import React, { useState, createContext } from 'react';
 
 const UserContext = createContext({
-  name: '',
-  setName: () => {},
+  user: { uid: null },
+  setUser: uid => {},
 });
 
-const UserProvider = ({ children }: { children: ReactElement }) => {
-  const [name, setName] = useState('SangHeon');
-  const value = { name, setName };
+const UserProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUserInfo] = useState({ uid: null });
+  const setUser = ({ uid }: { uid: string }) => {
+    setUserInfo({ uid });
+  };
+  const value = { user, setUser };
+
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
-const UserConsumer = UserContext.Consumer;
-
-export { UserProvider, UserConsumer };
-
-export default UserContext;
+export { UserContext, UserProvider };
