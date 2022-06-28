@@ -12,7 +12,7 @@ const StyledText = styled.Text<styledPropsType>`
   height: 20px;
   margin-bottom: 10px;
   line-height: 20px;
-  color: ${({ theme }) => theme.errorTet};
+  color: ${({ theme }) => theme.errorText};
 `;
 
 const ErrorMessage = ({ message }: { message: string }) => {

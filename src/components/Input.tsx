@@ -41,7 +41,7 @@ interface props {
   value?: string;
   onChangeText?: (text: string) => void;
   onSubmitEditing?: () => void;
-  onBlur?: () => {};
+  onBlur?: () => void;
   placeholder?: string;
   returnKeyType?: ReturnKeyTypeOptions;
   maxLength?: number;

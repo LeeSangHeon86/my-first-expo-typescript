@@ -8,7 +8,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 export type AuthStackParamList = {
   Signin: undefined;
   Signup: undefined;
-  Profile: undefined;
+  // Profile: { user: object };
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -46,7 +46,6 @@ const Auth = () => {
           },
         }}
       />
-      <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   );
 };

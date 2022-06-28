@@ -1,10 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
 import { themeType } from '../theme';
-import { Button, Image, Input } from '../components';
+import { Button, Image, Input, ErrorMessage } from '../components';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { TextInput } from 'react-native';
+import { TextInput, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { signup } from '../firebase';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { AuthStackParamList } from '../navigations/Auth';
+import { validateEmail, removeWhitespace } from '../utils';
+import { UserContext, ProgressContext } from '../contexts';
 
 const Conatiner = styled.View<styledPropsType>`
   flex: 1;
@@ -28,16 +33,26 @@ interface styledPropsType {
   theme: themeType;
 }
 
+type SigninScreenNavPropsType = StackNavigationProp<
+  AuthStackParamList,
+  'Signin'
+>;
+type Props = {
+  navigation: SigninScreenNavPropsType;
+};
+
 const DEFAULT_Photo =
   'https://firebasestorage.googleapis.com/v0/b/react-native-chat-app-d8603.appspot.com/o/face.png?alt=media';
 
-const Signup = () => {
+const Signup = ({ navigation }: Props) => {
   const insets = useSafeAreaInsets();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [disabled, setDisabled] = useState(true);
 
   const refEmail = useRef<TextInput | null>(null);
   const refPassword = useRef<TextInput | null>(null);
@@ -45,8 +60,45 @@ const Signup = () => {
 
   const [photo, setPhoto] = useState(DEFAULT_Photo);
 
+  const { setUser } = useContext(UserContext);
+  const { spinner } = useContext(ProgressContext);
+
+  useEffect(() => {
+    setDisabled(
+      !(name && email && password && passwordConfirm && !errorMessage),
+    );
+  }, [name, email, password, passwordConfirm, errorMessage]);
+
+  useEffect(() => {
+    let error: string = '';
+    if (!name) {
+      error = 'Please enter your name';
+    } else if (!email) {
+      error = 'Please enter your email';
+    } else if (!validateEmail(email)) {
+      error = 'Please verify your email';
+    } else if (password.length < 6) {
+      error = 'The password must contain 6 characters at least';
+    } else if (password !== passwordConfirm) {
+      error = 'The password need to match';
+    } else {
+      error = '';
+    }
+    setErrorMessage(error);
+  }, [name, email, password, passwordConfirm]);
+
   const _handleSingupBtnPress = () => {
-    console.log('signup');
+    try {
+      spinner.start();
+      const user = signup({ name, email, password, photo });
+      setUser(user);
+      // navigation.navigate('Profile', { user });
+    } catch (e) {
+      Alert.alert('Signup Error');
+    } finally {
+      spinner.stop();
+    }
+    // console.log('signup');
   };
 
   return (
@@ -62,6 +114,7 @@ const Signup = () => {
           maxLength={20}
           textContentType="none"
           onSubmitEditing={() => refEmail.current?.focus()}
+          onBlur={() => setName(name.trim())} // 공백 방지
         />
         <Input
           ref={refEmail}
@@ -73,6 +126,7 @@ const Signup = () => {
           maxLength={20}
           textContentType="none"
           onSubmitEditing={() => refPassword.current?.focus()}
+          onBlur={() => setEmail(removeWhitespace(email))} // 공백 방지
         />
         <Input
           ref={refPassword}
@@ -85,6 +139,7 @@ const Signup = () => {
           textContentType="none"
           isPassword={true}
           onSubmitEditing={() => refPasswordConfirm.current?.focus()}
+          onBlur={() => setPassword(removeWhitespace(password))} // 공백 방지
         />
         <Input
           ref={refPasswordConfirm}
@@ -97,8 +152,14 @@ const Signup = () => {
           textContentType="none"
           isPassword={true}
           onSubmitEditing={_handleSingupBtnPress}
+          onBlur={() => setPasswordConfirm(removeWhitespace(passwordConfirm))} // 공백 방지
         />
-        <Button title="Sign up" onPress={_handleSingupBtnPress} />
+        <ErrorMessage message={errorMessage} />
+        <Button
+          title="Sign up"
+          onPress={_handleSingupBtnPress}
+          disabled={disabled}
+        />
       </Conatiner>
     </KeyboardAwareScrollView>
   );

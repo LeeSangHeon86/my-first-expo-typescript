@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from 'react';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { ThemeContext } from 'styled-components';
 import { themeType } from '../theme';
@@ -10,7 +10,7 @@ import { Alert, TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { signin } from '../firebase';
 import { validateEmail, removeWhitespace } from '../utils';
-import { useEffect } from 'react';
+import { UserContext, ProgressContext } from '../contexts';
 
 const Conatiner = styled.View<styledPropsType>`
   flex: 1;
@@ -42,38 +42,14 @@ type Props = {
   navigation: SigninScreenNavPropsType;
 };
 
-type AdditionalUserInfo = {
-  isNewUser: boolean;
-  profile: Object | null;
-  providerId: string;
-  username?: string | null;
-};
-
-type AuthCredential = {
-  providerId: string;
-  signInMethod: string;
-};
-
-type User = {
-  displayName: string;
-  email: string;
-  photoURL: string;
-  uid: string;
-};
-
-type UserCredential = {
-  additionalUserInfo?: AdditionalUserInfo | null;
-  credential: AuthCredential | null;
-  operationType?: string | null;
-  user: User | null;
-};
-
 const LOGO =
   'https://firebasestorage.googleapis.com/v0/b/react-native-chat-app-d8603.appspot.com/o/logo.png?alt=media';
 
 const Signin = ({ navigation }: Props) => {
   const insets = useSafeAreaInsets();
   const theme = useContext(ThemeContext);
+  const { setUser } = useContext(UserContext);
+  const { spinner } = useContext(ProgressContext);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -83,7 +59,7 @@ const Signin = ({ navigation }: Props) => {
 
   useEffect(() => {
     setDisabled(!(email && password && !errorMessage));
-  });
+  }, [email, password, errorMessage]);
 
   const _handleEmailChange = (email: string) => {
     const changedEmail = removeWhitespace(email);
@@ -100,10 +76,14 @@ const Signin = ({ navigation }: Props) => {
 
   const _handleSinginBtnPress = async () => {
     try {
+      spinner.start();
       const user = await signin({ email, password });
-      navigation.navigate('Profile', { user });
+      setUser(user);
+      // navigation.navigate('Profile', { user });
     } catch (e) {
       Alert.alert('Signin Error');
+    } finally {
+      spinner.stop();
     }
     // console.log('signin');
   };

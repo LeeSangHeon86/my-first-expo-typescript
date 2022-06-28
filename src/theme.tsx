@@ -10,7 +10,7 @@ const Colors = {
 const theme = {
   background: Colors.white,
   text: Colors.black,
-  errorTet: Colors.red,
+  errorText: Colors.red,
 
   // Button
   btnBackground: Colors.main,
@@ -27,12 +27,16 @@ const theme = {
   inputLabel: Colors.grey_1,
   inputPlaceholder: Colors.grey_1,
   inputBorder: Colors.grey_1,
+
+  // Spinner
+  spinnerBackground: Colors.black,
+  spinnerIndicator: Colors.white,
 };
 
 interface themeType {
   background?: string;
   text?: string;
-  errorTet?: string;
+  errorText?: string;
   btnBackground?: string;
   btnTitle?: string;
   btnTitleLink?: string;
@@ -43,6 +47,8 @@ interface themeType {
   inputBorder?: string;
   imgBtnBackground?: string;
   imgBtnIcon?: string;
+  spinnerBackground?: string;
+  spinnerIndicator?: string;
 }
 
 export { theme, themeType };
