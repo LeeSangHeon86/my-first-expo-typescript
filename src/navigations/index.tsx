@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import Auth from './Auth';
 import Main from './Main';
 import { UserContext, ProgressContext } from '../contexts';
-import { useContext } from 'react';
 import { Spinner } from '../components';
 
 const Navigation = () => {
@@ -11,7 +10,7 @@ const Navigation = () => {
   const { inProgress } = useContext(ProgressContext);
   return (
     <NavigationContainer>
-      {user.uid ? <Main /> : <Auth />}
+      {!user.uid ? <Main /> : <Auth />}
       {inProgress && <Spinner />}
     </NavigationContainer>
   );

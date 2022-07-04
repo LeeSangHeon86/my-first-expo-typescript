@@ -1,33 +1,38 @@
-import React, { useContext } from 'react';
-import { UserContext } from '../contexts';
+import React from 'react';
 import styled from 'styled-components/native';
 import { Button } from '../components';
 import { themeType } from '../theme';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackParamList } from '../navigations/Main';
 
-interface styledPropsType {
+interface ThemeProps {
   theme: themeType;
 }
 
-const Container = styled.View<styledPropsType>`
+const Container = styled.View<ThemeProps>`
   flex: 1;
   background-color: ${({ theme }) => theme.background};
 `;
 
+const StyledText = styled.Text`
+  font-size: 30px;
+`;
+
 type ProfileScreenNavPropsType = StackNavigationProp<
   MainStackParamList,
-  'Profile'
+  'ChannelCreation'
 >;
 type Props = {
   navigation: ProfileScreenNavPropsType;
 };
 
-export default function Profile({ navigation }: Props) {
-  const { setUser } = useContext(UserContext);
+const ChannelCreation = ({ navigation }: Props) => {
   return (
     <Container>
-      <Button title="Logout" onPress={() => setUser({ uid: null })} />
+      <StyledText>Channel Creation</StyledText>
+      <Button title="Create" onPress={() => navigation.replace('Channel')} />
     </Container>
   );
-}
+};
+
+export default ChannelCreation;
