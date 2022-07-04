@@ -16,6 +16,7 @@ const theme = {
   btnBackground: Colors.main,
   btnTitle: Colors.white,
   btnTitleLink: Colors.main,
+  btnSignout: Colors.red,
 
   // Image
   imgBackground: Colors.grey_0,
@@ -27,10 +28,15 @@ const theme = {
   inputLabel: Colors.grey_1,
   inputPlaceholder: Colors.grey_1,
   inputBorder: Colors.grey_1,
+  inputDisabled: Colors.grey_0,
 
   // Spinner
   spinnerBackground: Colors.black,
   spinnerIndicator: Colors.white,
+
+  // Tab
+  tabBtnActive: Colors.main,
+  tabBtnInActive: Colors.grey_1,
 };
 
 interface themeType {
@@ -40,15 +46,19 @@ interface themeType {
   btnBackground?: string;
   btnTitle?: string;
   btnTitleLink?: string;
+  btnSignout?: string;
   imgBackground?: string;
   inputBackground?: string;
   inputLabel?: string;
   inputPlaceholder?: string;
   inputBorder?: string;
+  inputDisabled?: string;
   imgBtnBackground?: string;
   imgBtnIcon?: string;
   spinnerBackground?: string;
   spinnerIndicator?: string;
+  tabBtnActive?: string;
+  tabBtnInActive?: string;
 }
 
 export { theme, themeType };

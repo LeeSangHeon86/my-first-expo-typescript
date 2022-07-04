@@ -27,7 +27,7 @@ const Title = styled.Text<styledPropsType>`
 interface propsType {
   title: string;
   onPress: () => void;
-  containerStyle?: { marginTop: number; backgroundColor: string };
+  containerStyle?: { marginTop?: number; backgroundColor?: string };
   textStyle?: { color: string; fontSize: number };
   disabled?: boolean;
 }

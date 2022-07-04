@@ -27,7 +27,8 @@ const StyledInput = styled.TextInput.attrs<styledPropsType>(({ theme }) => ({
   placeholderTextColor: theme.inputPlaceholder,
 }))<styledPropsType>`
   width: 100%;
-  background-color: ${({ theme }) => theme.inputBackground};
+  background-color: ${({ theme, editable }) =>
+    editable ? theme.inputBackground : theme.inputDisabled};
   color: ${({ theme }) => theme.text};
   padding: 20px 10px;
   font-size: 16px;
@@ -47,6 +48,7 @@ interface props {
   maxLength?: number;
   textContentType?: string;
   isPassword?: boolean;
+  disabled?: boolean;
 }
 
 const Input = forwardRef<TextInput, props>(
@@ -61,6 +63,7 @@ const Input = forwardRef<TextInput, props>(
       returnKeyType,
       maxLength,
       isPassword,
+      disabled,
     },
     ref,
   ) => {
@@ -86,6 +89,7 @@ const Input = forwardRef<TextInput, props>(
           isFocused={isFocused}
           onFocus={() => SetIsFocused(true)}
           secureTextEntry={isPassword} // 비밀번호 ** 표시용
+          editable={!disabled}
         />
       </Container>
     );

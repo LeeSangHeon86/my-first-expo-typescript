@@ -51,6 +51,23 @@ export const signup = async ({ name, email, password, photo }: signupType) => {
   const { user } = await createUserWithEmailAndPassword(Auth, email, password);
   const photoURL = await uploadImage(photo);
   // await updateProfile(Auth.currentUser, { displayName: name, photoURL });
-  await updateProfile(user, { displayName: name, photoURL }); // 회원가입 후 name과 프로필 이미지 업데이트
+  // 회원가입 후 name과 프로필 이미지 업데이트
+  await updateProfile(user, { displayName: name, photoURL });
   return user;
+};
+
+export const getCurrentUser = () => {
+  const { uid, displayName, email, photoURL } = Auth.currentUser;
+  return { uid, name: displayName, email, photo: photoURL };
+};
+
+export const updateUserInfo = async (photo: string) => {
+  const photoURL = await uploadImage(photo);
+  await updateProfile(Auth.currentUser, { photoURL });
+  return photoURL;
+};
+
+export const signout = async () => {
+  await Auth.signOut();
+  return;
 };
