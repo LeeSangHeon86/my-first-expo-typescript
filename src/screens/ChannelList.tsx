@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { FlatList } from 'react-native';
-import { Button } from '../components';
 import { themeType } from '../theme';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { HomeTabParamList } from '../navigations/Home';
 import { MaterialIcons } from '@expo/vector-icons';
+import { app } from '../firebase';
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  query,
+  orderBy,
+} from 'firebase/firestore';
+import moment from 'moment';
+
+const getDataOrTime = (ts: number) => {
+  const now = moment().startOf('day');
+  const target = moment(ts).startOf('day');
+  return moment(ts).format(now.diff(target, 'day') > 0 ? 'MM/DD' : 'HH:mm');
+};
 
 interface ThemeProps {
   theme: themeType;
@@ -26,16 +39,6 @@ type ListScreenNavPropsType = BottomTabNavigationProp<HomeTabParamList, 'List'>;
 type Props = {
   navigation: ListScreenNavPropsType;
 };
-
-const channels = [];
-for (let i = 0; i < 1000; i++) {
-  channels.push({
-    id: i,
-    title: `title: ${i}`,
-    description: `desc: ${i}`,
-    createdAt: i,
-  });
-}
 
 const ItemContainer = styled.TouchableOpacity<ThemeProps>`
   flex-direction: row;
@@ -82,20 +85,18 @@ interface itemProps {
     description: string;
     createdAt: number;
   };
-  onPress: () => void;
+  onPress: (params: object) => void;
 }
 
 const Item = React.memo(
   ({ item: { id, title, description, createdAt }, onPress }: itemProps) => {
-    console.log(id);
-
     return (
-      <ItemContainer>
+      <ItemContainer onPress={() => onPress({ id, title })}>
         <ItemTextContainer>
           <ItemTitle>{title}</ItemTitle>
           <ItemDesc>{description}</ItemDesc>
         </ItemTextContainer>
-        <ItemTime>{createdAt}</ItemTime>
+        <ItemTime>{getDataOrTime(createdAt)}</ItemTime>
         <ItemIcon />
       </ItemContainer>
     );
@@ -103,13 +104,39 @@ const Item = React.memo(
 );
 
 const ChannelList = ({ navigation }: Props) => {
+  const [channels, setChannels] = useState([]);
+  const db = getFirestore(app);
+
+  useEffect(() => {
+    const collectionQuery = query(
+      collection(db, 'channels'),
+      orderBy('createdAt', 'desc'),
+    );
+
+    const unsubscribe = onSnapshot(collectionQuery, snapshot => {
+      const list = [];
+      snapshot.forEach(doc => list.push(doc.data()));
+
+      setChannels(list);
+    });
+    return () => unsubscribe();
+  }, []);
+
   return (
     <Container>
       <StyledText>Channel List</StyledText>
       <FlatList
         data={channels}
-        renderItem={({ item }) => <Item item={item} onPress={() => {}} />}
-        keyExtractor={item => item['id'].toString()}
+        renderItem={({ item }) => (
+          <Item
+            key={item.id}
+            item={item}
+            onPress={({ id, title }: { id: string; title: string }) => {
+              navigation.navigate('Channel', { id, title });
+            }}
+          />
+        )}
+        // keyExtractor={item => item['id'].toString()}
         windowSize={5}
       />
     </Container>

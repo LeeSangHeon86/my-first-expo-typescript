@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Button } from '../components';
 import { themeType } from '../theme';
 
 interface ThemeProps {
@@ -16,10 +15,12 @@ const StyledText = styled.Text`
   font-size: 30px;
 `;
 
-const Channel = () => {
+const Channel = ({ route }) => {
   return (
     <Container>
       <StyledText>Channel</StyledText>
+      <StyledText>{route.params.id}</StyledText>
+      <StyledText>{route.params.title}</StyledText>
     </Container>
   );
 };

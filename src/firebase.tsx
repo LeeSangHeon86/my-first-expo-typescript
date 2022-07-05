@@ -16,7 +16,7 @@ import {
   addDoc,
 } from 'firebase/firestore';
 
-const app = initializeApp(config);
+export const app = initializeApp(config);
 
 const Auth = getAuth(app);
 
@@ -79,7 +79,7 @@ export const signout = async () => {
   return;
 };
 
-const db = getFirestore(app);
+export const db = getFirestore(app);
 
 export const createChannel = async ({
   title,
