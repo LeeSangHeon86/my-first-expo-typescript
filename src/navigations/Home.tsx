@@ -6,12 +6,13 @@ import { ThemeContext } from 'styled-components/native';
 import { themeType } from '../theme';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
-export type MainTabParamList = {
+export type HomeTabParamList = {
   List: undefined;
   Profile: { user: object };
+  Channel: { id: string; title: string };
 };
 
-const Tab = createBottomTabNavigator<MainTabParamList>();
+const Tab = createBottomTabNavigator<HomeTabParamList>();
 
 const TabIcon = ({ name, focused }: { name; focused: boolean }) => {
   const theme: themeType = useContext(ThemeContext);
@@ -29,6 +30,15 @@ const Home = ({ navigation, route }) => {
     const screenName = getFocusedRouteNameFromRoute(route) || 'List';
     navigation.setOptions({
       headerTitle: screenName,
+      headerRight: () =>
+        screenName === 'List' && (
+          <MaterialIcons
+            name="add"
+            size={26}
+            style={{ margin: 10 }}
+            onPress={() => navigation.navigate('ChannelCreation')}
+          />
+        ),
     });
   });
 

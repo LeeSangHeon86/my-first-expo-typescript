@@ -5,7 +5,7 @@ import { ThemeContext } from 'styled-components/native';
 import Home from './Home';
 
 export type MainStackParamList = {
-  Channel: undefined;
+  Channel: { id: string; title: string };
   ChannelCreation: undefined;
   Home: undefined;
 };

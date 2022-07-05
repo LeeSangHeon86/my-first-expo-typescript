@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import { Button, Image, Input } from '../components';
 import { themeType } from '../theme';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { MainTabParamList } from '../navigations/Home';
+import { HomeTabParamList } from '../navigations/Home';
 import { getCurrentUser, updateUserInfo, signout } from '../firebase';
 import { Alert } from 'react-native';
 import { ProgressContext } from '../contexts/Progress';
@@ -23,7 +23,7 @@ const Container = styled.View<styledPropsType>`
 `;
 
 type ProfileScreenNavPropsType = BottomTabNavigationProp<
-  MainTabParamList,
+  HomeTabParamList,
   'Profile'
 >;
 type Props = {

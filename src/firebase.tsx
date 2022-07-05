@@ -8,6 +8,13 @@ import {
   signOut,
 } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
+import {
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  addDoc,
+} from 'firebase/firestore';
 
 const app = initializeApp(config);
 
@@ -68,6 +75,24 @@ export const updateUserInfo = async (photo: string) => {
 };
 
 export const signout = async () => {
-  await Auth.signOut();
+  await signOut(Auth);
   return;
+};
+
+const db = getFirestore(app);
+
+export const createChannel = async ({
+  title,
+  desc,
+}: {
+  title: string;
+  desc: string;
+}) => {
+  const channelCollection = collection(db, 'channels');
+  const newChanneRef = doc(channelCollection);
+  const id = newChanneRef.id;
+  const newChannel = { id, title, description: desc, createdAt: Date.now() };
+
+  await setDoc(newChanneRef, newChannel);
+  return id;
 };

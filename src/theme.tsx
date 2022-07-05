@@ -37,6 +37,12 @@ const theme = {
   // Tab
   tabBtnActive: Colors.main,
   tabBtnInActive: Colors.grey_1,
+
+  // List - Item
+  itemBorder: Colors.grey_0,
+  itemTime: Colors.grey_1,
+  itemDesc: Colors.grey_1,
+  itemIcon: Colors.main,
 };
 
 interface themeType {
@@ -59,6 +65,10 @@ interface themeType {
   spinnerIndicator?: string;
   tabBtnActive?: string;
   tabBtnInActive?: string;
+  itemBorder?: string;
+  itemTime?: string;
+  itemDesc?: string;
+  itemIcon?: string;
 }
 
 export { theme, themeType };
