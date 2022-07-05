@@ -89,10 +89,24 @@ export const createChannel = async ({
   desc: string;
 }) => {
   const channelCollection = collection(db, 'channels');
-  const newChanneRef = doc(channelCollection);
-  const id = newChanneRef.id;
+  const newChannelRef = doc(channelCollection);
+  const id = newChannelRef.id;
   const newChannel = { id, title, description: desc, createdAt: Date.now() };
 
-  await setDoc(newChanneRef, newChannel);
+  await setDoc(newChannelRef, newChannel);
   return id;
 };
+
+export const createMessage = async ({ channelId, message }) => {
+  const docRef = doc(db, `channels/${channelId}/messages`, message._id);
+  await setDoc(docRef, { ...message, createdAt: Date.now() });
+};
+
+// export const createMessage = async ({ channelId, message }) => {
+//   const messageCollection = collection(db, `channels/${channelId}/messages`);
+//   const newMessageRef = doc(messageCollection);
+//   const id = newMessageRef.id;
+//   const newMessage = { text: message, createdAt: Date.now() };
+
+//   await setDoc(newMessageRef, newMessage);
+// };
