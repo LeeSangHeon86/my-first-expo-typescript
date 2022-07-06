@@ -104,6 +104,7 @@ const Channel = ({ route }) => {
         renderUsernameOnMessage={true}
         alwaysShowSend={true}
         renderSend={props => SendButton(props)}
+        //20220706
       />
     </Container>
   );
