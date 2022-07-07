@@ -1,10 +1,13 @@
 import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Profile } from '../screens';
+import { Channel, ChannelCreation } from '../screens';
 import { ThemeContext } from 'styled-components/native';
+import Home from './Home';
 
 export type MainStackParamList = {
-  Profile: { user: object };
+  Channel: { id: string; title: string };
+  ChannelCreation: undefined;
+  Home: undefined;
 };
 
 const Stack = createStackNavigator<MainStackParamList>();
@@ -21,7 +24,9 @@ const Main = () => {
         cardStyle: { backgroundColor: theme.background },
       }}
     >
-      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Channel" component={Channel} />
+      <Stack.Screen name="ChannelCreation" component={ChannelCreation} />
     </Stack.Navigator>
   );
 };

@@ -66,7 +66,7 @@ const Image = ({ url, showButton = false, onChanePhoto }: PropsType) => {
     console.log(result);
 
     if (!result.cancelled) {
-      onChanePhoto(result.uri);
+      onChanePhoto(result['uri']);
     }
   };
 

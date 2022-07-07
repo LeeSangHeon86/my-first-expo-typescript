@@ -2,7 +2,7 @@ import React, { useState, createContext } from 'react';
 
 const UserContext = createContext({
   user: { uid: null },
-  setUser: uid => {},
+  setUser: ({ uid }) => {},
 });
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {

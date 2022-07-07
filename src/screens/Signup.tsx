@@ -87,10 +87,10 @@ const Signup = ({ navigation }: Props) => {
     setErrorMessage(error);
   }, [name, email, password, passwordConfirm]);
 
-  const _handleSingupBtnPress = () => {
+  const _handleSingupBtnPress = async () => {
     try {
       spinner.start();
-      const user = signup({ name, email, password, photo });
+      const user = await signup({ name, email, password, photo });
       setUser(user);
       // navigation.navigate('Profile', { user });
     } catch (e) {
