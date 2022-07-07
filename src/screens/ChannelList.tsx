@@ -16,8 +16,10 @@ import {
 import moment from 'moment';
 
 const getDataOrTime = (ts: number) => {
-  const now = moment().startOf('day');
-  const target = moment(ts).startOf('day');
+  const now = moment().startOf('day'); // 현재시간
+  console.log('now', now);
+  const target = moment(ts).startOf('day'); // 전달된 시간
+  console.log('target', target);
   return moment(ts).format(now.diff(target, 'day') > 0 ? 'MM/DD' : 'HH:mm');
 };
 

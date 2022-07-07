@@ -47,12 +47,11 @@ const SendButton = (props: { text?: string }) => {
 };
 
 const Channel = ({ route }) => {
-  const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const { uid, name, photo } = getCurrentUser();
 
   const _handleMessageSend = async (messageList: object[]) => {
-    // console.log(messageList);
+    console.log(messageList);
     const message = messageList[0];
     try {
       await createMessage({ channelId: route.params.id, message });
@@ -81,16 +80,6 @@ const Channel = ({ route }) => {
 
   return (
     <Container>
-      {/* <StyledText>Channel</StyledText>
-      <StyledText>{route.params.id}</StyledText>
-      <StyledText>{route.params.title}</StyledText> */}
-      {/* <Input
-        value={message}
-        onChangeText={setMessage}
-        onSubmitEditing={() =>
-          createMessage({ channelId: route.params.id, message })
-        }
-      /> */}
       <GiftedChat
         placeholder="Enter a message..."
         messages={messages}
@@ -104,7 +93,6 @@ const Channel = ({ route }) => {
         renderUsernameOnMessage={true}
         alwaysShowSend={true}
         renderSend={props => SendButton(props)}
-        //20220706
       />
     </Container>
   );
