@@ -13,6 +13,7 @@ const Container = styled.View`
 `;
 
 export default function App() {
+  // 20220710
   return (
     <ThemeProvider theme={theme}>
       <ProgressProvider>
